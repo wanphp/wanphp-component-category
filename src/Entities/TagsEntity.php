@@ -15,7 +15,7 @@ use Wanphp\Libray\Mysql\EntityTrait;
 /**
  * Class Tags
  * @package Wanphp\Components\Category\Entities
- * @OA\Schema(schema="NewTag",title="新建标签",required={"name"})
+ * @OA\Schema(schema="NewTag",title="新建标签",required={"name","code"})
  */
 class TagsEntity implements JsonSerializable
 {

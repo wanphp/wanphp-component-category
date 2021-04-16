@@ -15,7 +15,7 @@ use Wanphp\Libray\Mysql\EntityTrait;
 /**
  * Class CategoryEntity
  * @package Wanphp\Components\Category\Entities
- * @OA\Schema(schema="NewCategory",title="新建分类", required={"name"})
+ * @OA\Schema(schema="NewCategory",title="新建分类", required={"name","code"})
  */
 class CategoryEntity implements JsonSerializable
 {
