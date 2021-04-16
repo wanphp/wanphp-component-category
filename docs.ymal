@@ -1,0 +1,324 @@
+openapi: 3.0.0
+info:
+  title: 分类扩展接口
+  description: 'wanphp 分类扩展接口'
+  version: 1.0.0
+servers:
+  -
+    url: 'https://localhost'
+    description: 'OpenApi host'
+paths:
+  /api/manage/category:
+    post:
+      tags:
+        - Category
+      summary: 新建分类
+      operationId: addCategory
+      requestBody:
+        description: 分类
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewCategory'
+      responses:
+        '201':
+          description: 创建成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - { $ref: '#/components/schemas/Success' }
+                  - { properties: { datas: { properties: { id: { type: integer } }, type: object } }, type: object }
+        '400':
+          description: 请求失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        -
+          bearerAuth: []
+  '/api/manage/category/{id}':
+    put:
+      tags:
+        - Category
+      summary: 修改分类
+      operationId: editCategory
+      parameters:
+        -
+          name: id
+          in: path
+          description: 分类ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: 指定需要更新数据
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewCategory'
+      responses:
+        '201':
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - { $ref: '#/components/schemas/Success' }
+                  - { properties: { datas: { properties: { up_num: { type: integer } }, type: object } }, type: object }
+        '400':
+          description: 请求失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        -
+          bearerAuth: []
+    delete:
+      tags:
+        - Category
+      summary: 删除分类
+      operationId: delCategory
+      parameters:
+        -
+          name: id
+          in: path
+          description: 分类ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 请求成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - { $ref: '#/components/schemas/Success' }
+                  - { properties: { datas: { properties: { del_num: { type: integer } }, type: object } }, type: object }
+        '400':
+          description: 请求失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        -
+          bearerAuth: []
+  /api/manage/tag:
+    post:
+      tags:
+        - Tag
+      summary: 新建标签
+      operationId: addTag
+      requestBody:
+        description: 标签
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewTag'
+      responses:
+        '201':
+          description: 创建成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - { $ref: '#/components/schemas/Success' }
+                  - { properties: { datas: { properties: { id: { type: integer } }, type: object } }, type: object }
+        '400':
+          description: 请求失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        -
+          bearerAuth: []
+  '/api/manage/tag/{id}':
+    put:
+      tags:
+        - Tag
+      summary: 修改标签
+      operationId: editTag
+      parameters:
+        -
+          name: id
+          in: path
+          description: 标签ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: 指定需要更新数据
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewTag'
+      responses:
+        '201':
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - { $ref: '#/components/schemas/Success' }
+                  - { properties: { datas: { properties: { up_num: { type: integer } }, type: object } }, type: object }
+        '400':
+          description: 请求失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        -
+          bearerAuth: []
+    delete:
+      tags:
+        - Tag
+      summary: 删除分类
+      operationId: delTag
+      parameters:
+        -
+          name: id
+          in: path
+          description: 分类ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: 请求成功
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - { $ref: '#/components/schemas/Success' }
+                  - { properties: { datas: { properties: { del_num: { type: integer } }, type: object } }, type: object }
+        '400':
+          description: 请求失败
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      security:
+        -
+          bearerAuth: []
+components:
+  schemas:
+    Error:
+      title: 出错提示
+      properties:
+        code:
+          type: string
+          example: '400'
+        error:
+          type: string
+        error_description:
+          type: string
+        hint:
+          type: string
+        message:
+          type: string
+          example: 错误说明
+      type: object
+    Success:
+      title: 成功提示
+      required:
+        - code
+        - message
+        - datas
+      properties:
+        code:
+          type: string
+          example: '200'
+        message:
+          type: string
+          example: OK
+        datas:
+          description: 返回数据
+          type: object
+      type: object
+    NewCategory:
+      title: 新建分类
+      required:
+        - name
+      properties:
+        parent_id:
+          description: 父类ID
+          type: integer
+        name:
+          description: 名称
+          type: string
+        cover:
+          description: 封面
+          type: string
+        description:
+          description: 分类简介
+          type: string
+        sortOrder:
+          description: 排序
+          type: integer
+      type: object
+    CategoryList:
+      title: 分类
+      type: object
+      allOf:
+        -
+          $ref: '#/components/schemas/NewCategory'
+        -
+          required:
+            - id
+          properties:
+            id:
+              description: 分类ID
+              type: integer
+              format: int64
+          type: object
+    NewTag:
+      title: 新建标签
+      required:
+        - name
+      properties:
+        name:
+          description: 标签名称
+          type: string
+        sortOrder:
+          description: 排序
+          type: integer
+      type: object
+    Tags:
+      title: 标签
+      type: object
+      allOf:
+        -
+          $ref: '#/components/schemas/NewTag'
+        -
+          properties:
+            id:
+              description: 标签ID
+              type: integer
+              format: int32
+          type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      bearerFormat: JWT
+      scheme: bearer
+tags:
+  -
+    name: Category
+    description: 分类
+  -
+    name: Tag
+    description: 标签
