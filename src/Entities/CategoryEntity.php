@@ -72,6 +72,11 @@ class CategoryEntity implements JsonSerializable
    * @var integer
    */
   private int $sortOrder;
+
+  public function jsonSerialize()
+  {
+    return get_object_vars($this);
+  }
 }
 /**
  * @OA\Schema(
