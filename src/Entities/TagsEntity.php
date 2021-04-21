@@ -25,30 +25,25 @@ class TagsEntity implements JsonSerializable
    * @DBType({"key":"PRI","type":"smallint NOT NULL AUTO_INCREMENT"})
    * @var integer|null
    */
-  private ?int $id;
+  private $id;
   /**
    * 分组,如：article,link
    * @DBType({"key":"MUL","type":"varchar(20) NOT NULL DEFAULT ''"})
    * @var string
    */
-  private string $code;
+  private $code;
   /**
    * @DBType({"type":"varchar(30) NOT NULL DEFAULT ''"})
    * @OA\Property(description="标签名称")
    * @var string
    */
-  private string $name;
+  private $name;
   /**
    * @DBType({"type":"smallint(6) NOT NULL DEFAULT 0"})
    * @OA\Property(description="排序")
    * @var integer
    */
-  private int $sortOrder;
-
-  public function jsonSerialize()
-  {
-    return get_object_vars($this);
-  }
+  private $sortOrder;
 }
 
 /**

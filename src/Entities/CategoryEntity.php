@@ -25,58 +25,53 @@ class CategoryEntity implements JsonSerializable
    * @DBType({"key":"PRI","type":"smallint(6) NOT NULL AUTO_INCREMENT"})
    * @var integer|null
    */
-  private ?int $id;
+  private $id;
   /**
    * 分组,如：article,link
    * @DBType({"key":"MUL","type":"varchar(20) NOT NULL DEFAULT ''"})
    * @var string
    */
-  private string $code;
+  private $code;
   /**
    * @DBType({"key":"MUL","type":"smallint(6) NOT NULL DEFAULT 0"})
    * @OA\Property(description="父类ID")
    * @var integer
    */
-  private int $parent_id;
+  private $parent_id;
   /**
    * @DBType({"type":"varchar(20) NOT NULL DEFAULT ''"})
    * @OA\Property(description="名称")
    * @var string
    */
-  private string $name;
+  private $name;
   /**
    * @DBType({"type":"varchar(200) NOT NULL DEFAULT ''"})
    * @OA\Property(description="封面")
    * @var string
    */
-  private string $cover;
+  private $cover;
   /**
    * @DBType({"type":"varchar(300) NOT NULL DEFAULT ''"})
    * @OA\Property(description="分类简介")
    * @var string
    */
-  private string $description;
+  private $description;
   /**
    * @DBType({"type":"varchar(200) NOT NULL DEFAULT ''"})
    * @var string
    */
-  private string $parent_path;
+  private $parent_path;
   /**
    * @DBType({"type":"tinyint(4) NOT NULL DEFAULT ''"})
    * @var string
    */
-  private string $deep;
+  private $deep;
   /**
    * @DBType({"type":"smallint(6) NOT NULL DEFAULT 0"})
    * @OA\Property(description="排序")
    * @var integer
    */
-  private int $sortOrder;
-
-  public function jsonSerialize()
-  {
-    return get_object_vars($this);
-  }
+  private $sortOrder;
 }
 /**
  * @OA\Schema(
