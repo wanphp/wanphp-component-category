@@ -49,7 +49,7 @@ class CategoryApi extends Api
    *      allOf={
    *       @OA\Schema(ref="#/components/schemas/Success"),
    *       @OA\Schema(
-   *         @OA\Property(property="datas",@OA\Property(property="id",type="integer"))
+   *         @OA\Property(property="id",type="integer")
    *       )
    *      }
    *    )
@@ -84,7 +84,7 @@ class CategoryApi extends Api
    *      allOf={
    *       @OA\Schema(ref="#/components/schemas/Success"),
    *       @OA\Schema(
-   *         @OA\Property(property="datas",@OA\Property(property="up_num",type="integer"))
+   *         @OA\Property(property="upNum",type="integer")
    *       )
    *      }
    *    )
@@ -111,7 +111,7 @@ class CategoryApi extends Api
    *      allOf={
    *       @OA\Schema(ref="#/components/schemas/Success"),
    *       @OA\Schema(
-   *         @OA\Property(property="datas",@OA\Property(property="del_num",type="integer"))
+   *         @OA\Property(property="delNum",type="integer")
    *       )
    *      }
    *    )
@@ -126,7 +126,7 @@ class CategoryApi extends Api
         $data = $this->request->getParsedBody();
         if (isset($data['parent_id']) && $data['parent_id'] > 0) {
           $data['parent_path[JSON]'] = $this->category->get('parent_path[JSON]', ['id' => $data['parent_id']]);
-          array_push($data['parent_path[JSON]'], $data['parent_id']);
+          $data['parent_path[JSON]'][] = $data['parent_id'];
           $data['deep'] = count($data['parent_path[JSON]']);
         } else {
           $data['parent_path[JSON]'] = [];
@@ -140,7 +140,7 @@ class CategoryApi extends Api
           $data = $this->request->getParsedBody();
           if (isset($data['parent_id']) && $data['parent_id'] > 0) {
             $parent_path = $this->category->get('parent_path[JSON]', ['id' => $data['parent_id']]);
-            array_push($parent_path, $data['parent_id']);
+            $parent_path[] = $data['parent_id'];
             $data['parent_path[JSON]'] = $parent_path;
             $data['deep'] = count($parent_path);
           } else {
@@ -155,12 +155,12 @@ class CategoryApi extends Api
             $parent_id = $this->category->get('parent_id', ['id' => $id]);
             if ($data['parent_id'] != $parent_id) $this->upChild($id);
           }
-          return $this->respondWithData(['up_num' => $num], 201);
+          return $this->respondWithData(['upNum' => $num], 201);
         } else {
           return $this->respondWithError('ID有误', 403);
         }
       case 'DELETE':
-        return $this->respondWithData(['del_num' => $this->category->delete(['id' => $this->args['id']])]);
+        return $this->respondWithData(['delNum' => $this->category->delete(['id' => $this->args['id']])]);
       default:
         return $this->respondWithError('禁止访问', 403);
     }
@@ -173,7 +173,7 @@ class CategoryApi extends Api
   private function upChild($id)
   {
     $data['parent_path[JSON]'] = $this->category->get('parent_path[JSON]', ['id' => $id]);
-    array_push($data['parent_path[JSON]'], $id);
+    $data['parent_path[JSON]'][] = $id;
     $data['deep'] = count($data['parent_path[JSON]']);
     $child = $this->category->select('id', ['parent_id' => $id]);
     if ($child) {

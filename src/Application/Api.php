@@ -14,10 +14,6 @@ namespace Wanphp\Components\Category\Application;
  *     version="1.0.0",
  *     title="分类扩展接口"
  * )
- * @OA\Server(
- *   description="OpenApi host",
- *   url="https://localhost"
- * )
  */
 
 /**
@@ -25,7 +21,7 @@ namespace Wanphp\Components\Category\Application;
  *     name="Category",
  *     description="分类",
  * )
- *  @OA\Tag(
+ * @OA\Tag(
  *     name="Tag",
  *     description="标签",
  * )
@@ -44,11 +40,7 @@ namespace Wanphp\Components\Category\Application;
  * @OA\Schema(
  *   title="出错提示",
  *   schema="Error",
- *   @OA\Property(property="code", type="string", example="400"),
- *   @OA\Property(property="error", type="string"),
- *   @OA\Property(property="error_description", type="string"),
- *   @OA\Property(property="hint", type="string"),
- *   @OA\Property(property="message", type="string", example="错误说明")
+ *   type="object"
  * )
  */
 
@@ -56,17 +48,13 @@ namespace Wanphp\Components\Category\Application;
  * @OA\Schema(
  *   title="成功提示",
  *   schema="Success",
- *   required={"code", "message", "datas"},
- *   @OA\Property(property="code", type="string", example="200"),
- *   @OA\Property(property="message", type="string", example="OK"),
- *   @OA\Property(property="datas", type="object",description="返回数据")
+ *   type="object"
  * )
  */
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Exception\HttpBadRequestException;
-use Slim\Exception\HttpNotFoundException;
 use Exception;
 
 abstract class Api
@@ -74,27 +62,26 @@ abstract class Api
   /**
    * @var Request
    */
-  protected $request;
+  protected Request $request;
 
   /**
    * @var Response
    */
-  protected $response;
+  protected Response $response;
 
   /**
    * @var array
    */
-  protected $args;
+  protected array $args;
 
   /**
    * @param Request $request
    * @param Response $response
    * @param array $args
    * @return Response
-   * @throws HttpNotFoundException
    * @throws HttpBadRequestException
    */
-  public function __invoke(Request $request, Response $response, $args): Response
+  public function __invoke(Request $request, Response $response, array $args): Response
   {
     $this->request = $request;
     $this->response = $response;
@@ -115,12 +102,12 @@ abstract class Api
   abstract protected function action(): Response;
 
   /**
-   * @return array|object
+   * @return array
    * @throws HttpBadRequestException
    */
-  protected function getFormData()
+  protected function getFormData(): array
   {
-    $input = json_decode(file_get_contents('php://input'));
+    $input = json_decode(file_get_contents('php://input'), true);
 
     if (json_last_error() !== JSON_ERROR_NONE) {
       throw new HttpBadRequestException($this->request, 'JSON输入格式错误.');
@@ -130,26 +117,13 @@ abstract class Api
   }
 
   /**
-   * @param string $name
-   * @return mixed
-   * @throws HttpBadRequestException
-   */
-  protected function resolveArg(string $name)
-  {
-    if (!isset($this->args[$name])) {
-      throw new HttpBadRequestException($this->request, "找不到 `{$name}`.");
-    }
-
-    return $this->args[$name];
-  }
-
-  /**
-   * @param array|object|null $data
+   * @param array $data
+   * @param int $statusCode
    * @return Response
    */
-  protected function respondWithData($data = null, int $statusCode = 200): Response
+  protected function respondWithData(array $data = [], int $statusCode = 200): Response
   {
-    $json = json_encode(['code' => $statusCode, 'msg' => 'OK', 'datas' => $data], JSON_PRETTY_PRINT);
+    $json = json_encode($data, JSON_PRETTY_PRINT);
     $this->response->getBody()->write($json);
 
     return $this->respond($statusCode);
@@ -162,7 +136,7 @@ abstract class Api
    */
   protected function respondWithError($error = null, int $statusCode = 400): Response
   {
-    $json = json_encode(['code' => $statusCode, 'msg' => $error], JSON_PRETTY_PRINT);
+    $json = json_encode(['errMsg' => $error], JSON_PRETTY_PRINT);
     $this->response->getBody()->write($json);
 
     return $this->respond($statusCode);
@@ -174,8 +148,6 @@ abstract class Api
    */
   protected function respond($statusCode): Response
   {
-    return $this->response
-      ->withHeader('Content-Type', 'application/json')
-      ->withStatus($statusCode);
+    return $this->response->withHeader('Content-Type', 'application/json')->withStatus($statusCode);
   }
 }

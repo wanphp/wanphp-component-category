@@ -46,7 +46,7 @@ class TagApi extends Api
    *      allOf={
    *       @OA\Schema(ref="#/components/schemas/Success"),
    *       @OA\Schema(
-   *         @OA\Property(property="datas",@OA\Property(property="id",type="integer"))
+   *         @OA\Property(property="id",type="integer")
    *       )
    *      }
    *    )
@@ -81,7 +81,7 @@ class TagApi extends Api
    *      allOf={
    *       @OA\Schema(ref="#/components/schemas/Success"),
    *       @OA\Schema(
-   *         @OA\Property(property="datas",@OA\Property(property="up_num",type="integer"))
+   *         @OA\Property(property="upNum",type="integer")
    *       )
    *      }
    *    )
@@ -108,7 +108,7 @@ class TagApi extends Api
    *      allOf={
    *       @OA\Schema(ref="#/components/schemas/Success"),
    *       @OA\Schema(
-   *         @OA\Property(property="datas",@OA\Property(property="del_num",type="integer"))
+   *         @OA\Property(property="delNum",type="integer")
    *       )
    *      }
    *    )
@@ -121,14 +121,31 @@ class TagApi extends Api
     switch ($this->request->getMethod()) {
       case 'POST':
         $data = $this->request->getParsedBody();
-        $id = $this->tag->insert($data);
-        return $this->respondWithData(['id' => $id], 201);
+        $tag_id = $this->tag->get('id', ['name' => $data['name']]);
+        if (is_numeric($tag_id) && $tag_id > 0) {
+          return $this->respondWithError('标签已添加过');
+        } else {
+          return $this->respondWithData(['id' => $this->tag->insert($data)]);
+        }
       case 'PUT':
         $data = $this->request->getParsedBody();
-        $num = $this->tag->update($data, ['id' => $this->args['id']]);
-        return $this->respondWithData(['up_num' => $num], 201);
+        $id = (int)$this->args['id'];
+        $tag_id = $this->tag->get('id', ['id[!]' => $id, 'name' => $data['name']]);
+        if (is_numeric($tag_id) && $tag_id > 0) {
+          return $this->respondWithError('标签已存在');
+        }
+        if ($id > 0) {
+          return $this->respondWithData(['upNum' => $this->tag->update($data, ['id' => $id])]);
+        } else {
+          return $this->respondWithError('缺少ID');
+        }
       case 'DELETE':
-        return $this->respondWithData(['del_num' => $this->tag->delete(['id' => $this->args['id']])]);
+        $id = (int)($this->args['id'] ?? 0);
+        if ($id > 0) {
+          return $this->respondWithData(['delNum' => $this->tag->delete(['id' => $id])]);
+        } else {
+          return $this->respondWithError('缺少ID');
+        }
       default:
         return $this->respondWithError('禁止访问', 403);
     }
