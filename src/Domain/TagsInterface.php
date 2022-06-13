@@ -13,5 +13,5 @@ use Wanphp\Libray\Mysql\BaseInterface;
 
 interface TagsInterface extends BaseInterface
 {
-  const TABLENAME = "tags";
+  const TABLE_NAME = "tags";
 }

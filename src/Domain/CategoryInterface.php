@@ -13,5 +13,5 @@ use Wanphp\Libray\Mysql\BaseInterface;
 
 interface CategoryInterface extends BaseInterface
 {
-  const TABLENAME = "categorys";
+  const TABLE_NAME = "category";
 }

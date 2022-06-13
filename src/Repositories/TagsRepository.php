@@ -18,6 +18,6 @@ class TagsRepository extends BaseRepository implements TagsInterface
 {
   public function __construct(Database $database)
   {
-    parent::__construct($database, self::TABLENAME, TagsEntity::class);
+    parent::__construct($database, self::TABLE_NAME, TagsEntity::class);
   }
 }

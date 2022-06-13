@@ -39,7 +39,7 @@ class CategoryApi extends Api
    *     required=true,
    *     @OA\MediaType(
    *       mediaType="application/json",
-   *       @OA\Schema(ref="#/components/schemas/NewCategory")
+   *       @OA\Schema(ref="#/components/schemas/newCategory")
    *     )
    *   ),
    *  @OA\Response(
@@ -74,7 +74,7 @@ class CategoryApi extends Api
    *     required=true,
    *     @OA\MediaType(
    *       mediaType="application/json",
-   *       @OA\Schema(ref="#/components/schemas/NewCategory")
+   *       @OA\Schema(ref="#/components/schemas/newCategory")
    *     )
    *   ),
    *  @OA\Response(
@@ -124,12 +124,12 @@ class CategoryApi extends Api
     switch ($this->request->getMethod()) {
       case 'POST':
         $data = $this->request->getParsedBody();
-        if (isset($data['parent_id']) && $data['parent_id'] > 0) {
-          $data['parent_path[JSON]'] = $this->category->get('parent_path[JSON]', ['id' => $data['parent_id']]);
-          $data['parent_path[JSON]'][] = $data['parent_id'];
-          $data['deep'] = count($data['parent_path[JSON]']);
+        if (isset($data['parentId']) && $data['parentId'] > 0) {
+          $data['parentPath'] = $this->category->get('parentPath[JSON]', ['id' => $data['parentId']]);
+          $data['parentPath'][] = $data['parentId'];
+          $data['deep'] = count($data['parentPath']);
         } else {
-          $data['parent_path[JSON]'] = [];
+          $data['parentPath'] = [];
           $data['deep'] = 0;
         }
         $id = $this->category->insert($data);
@@ -138,22 +138,22 @@ class CategoryApi extends Api
         $id = $this->args['id'];
         if ($id > 0) {
           $data = $this->request->getParsedBody();
-          if (isset($data['parent_id']) && $data['parent_id'] > 0) {
-            $parent_path = $this->category->get('parent_path[JSON]', ['id' => $data['parent_id']]);
-            $parent_path[] = $data['parent_id'];
-            $data['parent_path[JSON]'] = $parent_path;
-            $data['deep'] = count($parent_path);
+          if (isset($data['parentId']) && $data['parentId'] > 0) {
+            $parentPath = $this->category->get('parentPath[JSON]', ['id' => $data['parentId']]);
+            $parentPath[] = $data['parentId'];
+            $data['parentPath'] = $parentPath;
+            $data['deep'] = count($parentPath);
           } else {
-            $data['parent_id'] = 0;
-            $data['parent_path'] = '';
+            $data['parentId'] = 0;
+            $data['parentPath'] = '';
             $data['deep'] = 0;
           }
 
           $num = $this->category->update($data, ['id' => $id]);
           if ($num > 0) {
             //更新子分类,父路径
-            $parent_id = $this->category->get('parent_id', ['id' => $id]);
-            if ($data['parent_id'] != $parent_id) $this->upChild($id);
+            $parentId = $this->category->get('parentId', ['id' => $id]);
+            if ($data['parentId'] != $parentId) $this->upChild($id);
           }
           return $this->respondWithData(['upNum' => $num], 201);
         } else {
@@ -172,13 +172,13 @@ class CategoryApi extends Api
    */
   private function upChild($id)
   {
-    $data['parent_path[JSON]'] = $this->category->get('parent_path[JSON]', ['id' => $id]);
-    $data['parent_path[JSON]'][] = $id;
-    $data['deep'] = count($data['parent_path[JSON]']);
-    $child = $this->category->select('id', ['parent_id' => $id]);
+    $data['parentPath'] = $this->category->get('parentPath[JSON]', ['id' => $id]);
+    $data['parentPath'][] = $id;
+    $data['deep'] = count($data['parentPath[JSON]']);
+    $child = $this->category->select('id', ['parentId' => $id]);
     if ($child) {
-      $this->category->update($data, ['id' => array_column($child, 'id')]);
-      foreach ($child as $item) $this->upChild($item['id']);
+      $this->category->update($data, ['id' => $child]);
+      foreach ($child as $id) $this->upChild($id);
     }
   }
 }

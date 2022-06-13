@@ -16,7 +16,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewCategory'
+              $ref: '#/components/schemas/newCategory'
       responses:
         '201':
           description: 创建成功
@@ -56,7 +56,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewCategory'
+              $ref: '#/components/schemas/newCategory'
       responses:
         '201':
           description: 更新成功
@@ -119,7 +119,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewTag'
+              $ref: '#/components/schemas/newTag'
       responses:
         '201':
           description: 创建成功
@@ -159,7 +159,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/NewTag'
+              $ref: '#/components/schemas/newTag'
       responses:
         '201':
           description: 更新成功
@@ -218,14 +218,14 @@ components:
     Success:
       title: 成功提示
       type: object
-    NewCategory:
+    newCategory:
       title: 新建分类
       description: 'Class CategoryEntity'
       required:
         - name
         - code
       properties:
-        parent_id:
+        parentId:
           description: 父类ID
           type: integer
         name:
@@ -255,8 +255,8 @@ components:
               format: int64
           type: object
         -
-          $ref: '#/components/schemas/NewCategory'
-    NewTag:
+          $ref: '#/components/schemas/newCategory'
+    newTag:
       title: 新建标签
       description: 'Class Tags'
       required:
@@ -282,7 +282,7 @@ components:
               format: int32
           type: object
         -
-          $ref: '#/components/schemas/NewTag'
+          $ref: '#/components/schemas/newTag'
   securitySchemes:
     bearerAuth:
       type: http

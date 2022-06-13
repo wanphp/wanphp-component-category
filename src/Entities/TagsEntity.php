@@ -15,7 +15,7 @@ use Wanphp\Libray\Mysql\EntityTrait;
 /**
  * Class Tags
  * @package Wanphp\Components\Category\Entities
- * @OA\Schema(schema="NewTag",title="新建标签",required={"name","code"})
+ * @OA\Schema(schema="newTag",title="新建标签",required={"name","code"})
  */
 class TagsEntity implements JsonSerializable
 {
@@ -25,25 +25,25 @@ class TagsEntity implements JsonSerializable
    * @DBType({"key":"PRI","type":"smallint NOT NULL AUTO_INCREMENT"})
    * @var integer|null
    */
-  private $id;
+  private ?int $id;
   /**
    * 分组,如：article,link
    * @DBType({"key":"MUL","type":"varchar(20) NOT NULL DEFAULT ''"})
    * @var string
    */
-  private $code;
+  private string $code;
   /**
    * @DBType({"type":"varchar(30) NOT NULL DEFAULT ''"})
    * @OA\Property(description="标签名称")
    * @var string
    */
-  private $name;
+  private string $name;
   /**
    * @DBType({"type":"smallint(6) NOT NULL DEFAULT 0"})
    * @OA\Property(description="排序")
    * @var integer
    */
-  private $sortOrder;
+  private int $sortOrder;
 }
 
 /**
@@ -51,7 +51,7 @@ class TagsEntity implements JsonSerializable
  *   schema="Tags",title="标签",
  *   type="object",
  *   allOf={
- *       @OA\Schema(ref="#/components/schemas/NewTag"),
+ *       @OA\Schema(ref="#/components/schemas/newTag"),
  *       @OA\Schema(
  *           @OA\Property(property="id",format="int32", type="integer", description="标签ID")
  *       )

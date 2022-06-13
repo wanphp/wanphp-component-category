@@ -18,6 +18,6 @@ class CategoryRepository extends BaseRepository implements CategoryInterface
 {
   public function __construct(Database $database)
   {
-    parent::__construct($database, self::TABLENAME, CategoryEntity::class);
+    parent::__construct($database, self::TABLE_NAME, CategoryEntity::class);
   }
 }

@@ -36,7 +36,7 @@ class TagApi extends Api
    *     required=true,
    *     @OA\MediaType(
    *       mediaType="application/json",
-   *       @OA\Schema(ref="#/components/schemas/NewTag")
+   *       @OA\Schema(ref="#/components/schemas/newTag")
    *     )
    *   ),
    *  @OA\Response(
@@ -71,7 +71,7 @@ class TagApi extends Api
    *     required=true,
    *     @OA\MediaType(
    *       mediaType="application/json",
-   *       @OA\Schema(ref="#/components/schemas/NewTag")
+   *       @OA\Schema(ref="#/components/schemas/newTag")
    *     )
    *   ),
    *  @OA\Response(
@@ -121,8 +121,8 @@ class TagApi extends Api
     switch ($this->request->getMethod()) {
       case 'POST':
         $data = $this->request->getParsedBody();
-        $tag_id = $this->tag->get('id', ['name' => $data['name']]);
-        if (is_numeric($tag_id) && $tag_id > 0) {
+        $id = $this->tag->get('id', ['name' => $data['name']]);
+        if ($id) {
           return $this->respondWithError('标签已添加过');
         } else {
           return $this->respondWithData(['id' => $this->tag->insert($data)]);
