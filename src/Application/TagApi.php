@@ -26,7 +26,7 @@ class TagApi extends Api
    * @return Response
    * @throws Exception
    * @OA\Post(
-   *  path="/api/manage/tag",
+   *  path="/admin/tag",
    *  tags={"Tag"},
    *  summary="新建标签",
    *  operationId="addTag",
@@ -54,7 +54,7 @@ class TagApi extends Api
    *  @OA\Response(response="400",description="请求失败",@OA\JsonContent(ref="#/components/schemas/Error"))
    * )
    * @OA\Put(
-   *  path="/api/manage/tag/{id}",
+   *  path="/admin/tag/{id}",
    *  tags={"Tag"},
    *  summary="修改标签",
    *  operationId="editTag",
@@ -89,7 +89,7 @@ class TagApi extends Api
    *  @OA\Response(response="400",description="请求失败",@OA\JsonContent(ref="#/components/schemas/Error"))
    * )
    * @OA\Delete(
-   *  path="/api/manage/tag/{id}",
+   *  path="/admin/tag/{id}",
    *  tags={"Tag"},
    *  summary="删除分类",
    *  operationId="delTag",

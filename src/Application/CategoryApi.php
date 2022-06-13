@@ -29,7 +29,7 @@ class CategoryApi extends Api
    * @return Response
    * @throws Exception
    * @OA\Post(
-   *  path="/api/manage/category",
+   *  path="/admin/category",
    *  tags={"Category"},
    *  summary="新建分类",
    *  operationId="addCategory",
@@ -57,7 +57,7 @@ class CategoryApi extends Api
    *  @OA\Response(response="400",description="请求失败",@OA\JsonContent(ref="#/components/schemas/Error"))
    * )
    * @OA\Put(
-   *  path="/api/manage/category/{id}",
+   *  path="/admin/category/{id}",
    *  tags={"Category"},
    *  summary="修改分类",
    *  operationId="editCategory",
@@ -92,7 +92,7 @@ class CategoryApi extends Api
    *  @OA\Response(response="400",description="请求失败",@OA\JsonContent(ref="#/components/schemas/Error"))
    * )
    * @OA\Delete(
-   *  path="/api/manage/category/{id}",
+   *  path="/admin/category/{id}",
    *  tags={"Category"},
    *  summary="删除分类",
    *  operationId="delCategory",
