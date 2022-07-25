@@ -174,7 +174,7 @@ class CategoryApi extends Api
   {
     $data['parentPath'] = $this->category->get('parentPath[JSON]', ['id' => $id]);
     $data['parentPath'][] = $id;
-    $data['deep'] = count($data['parentPath[JSON]']);
+    $data['deep'] = count($data['parentPath']);
     $child = $this->category->select('id', ['parentId' => $id]);
     if ($child) {
       $this->category->update($data, ['id' => $child]);
